@@ -1,2 +1,7 @@
 streamlit
 seaborn
+numpy
+pandas
+kagglehub
+matplotlib
+os
