@@ -4,4 +4,3 @@ numpy
 pandas
 matplotlib
 kagglehub
-statsmodels.graphics.mosaicplot
