@@ -439,7 +439,7 @@ with aba_visualizacao:
                         y_pos = bottom[j] + val/2
                         ax.text(x_pos, y_pos, f'{int(val):,}', 
                                ha='center', va='center', 
-                               color='white', fontsize=8, fontweight='bold')
+                               color='black', fontsize=8, fontweight='bold')
                 
                 bottom += valores
             
@@ -484,7 +484,7 @@ with aba_visualizacao:
                         y_pos = bottom[j] + val/2
                         ax.text(x_pos, y_pos, f'{int(val):,}', 
                                ha='center', va='center', 
-                               color='white', fontsize=8, fontweight='bold')
+                               color='black', fontsize=8, fontweight='bold')
                 
                 bottom += valores
             
