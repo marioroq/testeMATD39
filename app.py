@@ -478,8 +478,8 @@ with aba_visualizacao:
             st.pyplot(fig)
         
         elif checkbox_pag and checkbox_rev and not checkbox_cat:
-            
-            df_mosaic = filtrado[['payment_type', 'review_score']].copy()
+            tabela_cruzada = pd.crosstab(tabela_final['payment_type'], 
+                                        tabela_final['review_score'])
             
             traducao_pagamento = {
                 'boleto': 'Boleto',
@@ -487,35 +487,29 @@ with aba_visualizacao:
                 'debit_card': 'Débito',
                 'voucher': 'Voucher'
             }
-            df_mosaic['payment_type'] = df_mosaic['payment_type'].map(traducao_pagamento)
+            tabela_cruzada.index = [traducao_pagamento.get(x, x) for x in tabela_cruzada.index]
             
             fig, ax = plt.subplots(figsize=(10, 8))
             
-            from statsmodels.graphics.mosaicplot import mosaic
+            tabela_normalizada = tabela_cruzada.div(tabela_cruzada.sum(axis=1), axis=0)
             
-            props = {}
-            coolors_colors = ['#8ecae6', '#219ebc', '#023047', '#ffb703', '#fb8500']
+            custom_cmap = LinearSegmentedColormap.from_list('custom_review', 
+                                                           ['#FF6B6B', '#FFA726', '#FFEB3B', '#4CD964', '#5AC8FA'])
             
-            review_scores = sorted(df_mosaic['review_score'].unique())
-            payment_types = df_mosaic['payment_type'].unique()
+
+            sns.heatmap(tabela_normalizada, annot=True, fmt=".2%", cmap=custom_cmap, 
+                       cbar_kws={'label': 'Proporção'}, ax=ax,
+                       linewidths=0.5, linecolor='black')
             
-            color_index = 0
-            for payment in payment_types:
-                for review in review_scores:
-                    props[(payment, review)] = {'color': coolors_colors[color_index % len(coolors_colors)]}
-                    color_index += 1
-            
-            mosaic(df_mosaic, ['payment_type', 'review_score'], 
-                properties=props, ax=ax, gap=0.005, title='Relação entre Tipos de Pagamento e Notas de Avaliação')
-            
-            ax.set_xlabel('Tipo de Pagamento', fontsize=12)
-            ax.set_ylabel('Nota de Avaliação', fontsize=12)
-            ax.set_title('Relação entre Tipos de Pagamento e Notas de Avaliação', fontsize=14)
+            ax.set_xlabel('Nota de Avaliação', fontsize=12)
+            ax.set_ylabel('Tipo de Pagamento', fontsize=12)
+            ax.set_title('Proporção de Avaliações por Tipo de Pagamento', fontsize=14)
             
             plt.tight_layout()
             st.pyplot(fig)
-            
+
         elif checkbox_cat and checkbox_pag and checkbox_rev:
+ 
             st.info("Para visualizar gráficos específicos, selecione apenas 1 ou 2 opções de filtro.")
 
     if not (checkbox_cat or checkbox_pag or checkbox_rev):
