@@ -403,7 +403,6 @@ with aba_visualizacao:
             st.pyplot(fig)
         
         elif checkbox_cat and checkbox_pag and not checkbox_rev:
-            
             if categorias_selecionadas:
                 dados_grafico = filtrado
             else:
@@ -430,9 +429,19 @@ with aba_visualizacao:
             colors = ['#8ecae6', '#219ebc', '#023047', '#ffb703']
             
             for i, pagamento in enumerate(tabela_cruzada.columns):
-                ax.bar(tabela_cruzada.index, tabela_cruzada[pagamento], bottom=bottom, 
-                    label=pagamento, color=colors[i % len(colors)], alpha=0.8)
-                bottom += tabela_cruzada[pagamento].values
+                valores = tabela_cruzada[pagamento].values
+                ax.bar(tabela_cruzada.index, valores, bottom=bottom, 
+                      label=pagamento, color=colors[i % len(colors)], alpha=0.8)
+                
+                for j, val in enumerate(valores):
+                    if val > 0: 
+                        x_pos = j
+                        y_pos = bottom[j] + val/2
+                        ax.text(x_pos, y_pos, f'{int(val):,}', 
+                               ha='center', va='center', 
+                               color='white', fontsize=8, fontweight='bold')
+                
+                bottom += valores
             
             ax.set_xlabel('Categorias de Produtos', fontsize=12)
             ax.set_ylabel('Quantidade', fontsize=12)
@@ -464,9 +473,20 @@ with aba_visualizacao:
             colors = ['#8ecae6', '#219ebc', '#023047', '#ffb703', '#fb8500']
             
             for i, review in enumerate(sorted(tabela_cruzada.columns)):
-                ax.bar(tabela_cruzada.index, tabela_cruzada[review], bottom=bottom, 
-                    label=f'Nota {review}', color=colors[i % len(colors)], alpha=0.8)
-                bottom += tabela_cruzada[review].values
+                valores = tabela_cruzada[review].values
+                ax.bar(tabela_cruzada.index, valores, bottom=bottom, 
+                      label=f'Nota {review}', color=colors[i % len(colors)], alpha=0.8)
+                
+               
+                for j, val in enumerate(valores):
+                    if val > 0:  
+                        x_pos = j
+                        y_pos = bottom[j] + val/2
+                        ax.text(x_pos, y_pos, f'{int(val):,}', 
+                               ha='center', va='center', 
+                               color='white', fontsize=8, fontweight='bold')
+                
+                bottom += valores
             
             ax.set_xlabel('Categorias de Produtos', fontsize=12)
             ax.set_ylabel('Quantidade', fontsize=12)
@@ -477,7 +497,7 @@ with aba_visualizacao:
             
             plt.tight_layout()
             st.pyplot(fig)
-        
+
         elif checkbox_pag and checkbox_rev and not checkbox_cat:
             tabela_cruzada = pd.crosstab(tabela_final['payment_type'], 
                                         tabela_final['review_score'])
