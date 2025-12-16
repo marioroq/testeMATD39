@@ -491,11 +491,7 @@ with aba_visualizacao:
             
             fig, ax = plt.subplots(figsize=(10, 8))
             
-            tabela_normalizada = tabela_cruzada.div(tabela_cruzada.sum(axis=1), axis=0)
-            
-            custom_cmap = LinearSegmentedColormap.from_list('custom_review', 
-                                                           ['#FF6B6B', '#FFA726', '#FFEB3B', '#4CD964', '#5AC8FA'])
-            
+            tabela_normalizada = tabela_cruzada.div(tabela_cruzada.sum(axis=1), axis=0)          
 
             sns.heatmap(tabela_normalizada, annot=True, fmt=".2%", cmap=custom_cmap, 
                        cbar_kws={'label': 'Proporção'}, ax=ax,
