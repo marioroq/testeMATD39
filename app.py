@@ -493,7 +493,13 @@ with aba_visualizacao:
             fig, ax = plt.subplots(figsize=(10, 8))
             
             tabela_normalizada = tabela_cruzada.div(tabela_cruzada.sum(axis=1), axis=0)          
+        
+            from matplotlib.colors import LinearSegmentedColormap
+            
+            coolors_colors = ['#8ecae6', '#219ebc', '#023047', '#ffb703', '#fb8500']
 
+            custom_cmap = LinearSegmentedColormap.from_list('coolors_cmap', coolors_colors)
+            
             sns.heatmap(tabela_normalizada, annot=True, fmt=".2%", cmap=custom_cmap, 
                        cbar_kws={'label': 'Proporção'}, ax=ax,
                        linewidths=0.5, linecolor='black')
@@ -504,7 +510,7 @@ with aba_visualizacao:
             
             plt.tight_layout()
             st.pyplot(fig)
-
+            
         elif checkbox_cat and checkbox_pag and checkbox_rev:
  
             st.info("Para visualizar gráficos específicos, selecione apenas 1 ou 2 opções de filtro.")
